@@ -80,8 +80,6 @@ Depois vamos criar um EC2 Connect Endpoint para que possamos conectar nas instan
 * Coloque alguma Subnet da VPC
 * Coloque o mesmo Security Group do EC2
 
-<p>À primeira vista não precisaremos utilizar o Endpoint, pois não precisaremos conectar na instância para configurá-la, mas foi criado caso precise.</p>
-
 ---
 
 ### Criando Elastic File System (EFS)
@@ -186,6 +184,36 @@ Agora iremos criar um Launch Template para futuramente criar um Auto Scalling Gr
     <img src="src/asg-lb.png">
     <p><em>Adicione seu Clasic Load Balancer no Auto Scalling Group.</em></p>
 </div>
+
+---
+#### Alterando pagina inicial do Wordpress
+
+O projeto pede para que o wordpress abra na página de login, então iremos faer isso.
+
+1. Vamos logar na instância do Wordpress via EC2 Endpoint.
+2. vá até o efs, onde encontra nossos arquivos wordpress e nosso tema:
+    ```bash
+    cd /mnt/efs/wp-content/themes/<SEU TEMA ATIVO>
+    ```
+    No meu caso é o tema chamado `twentytwentyfour`
+3. edite o arquivo `function.php` que se encontra no seu diretório.
+    ```bash
+    vim functions.php
+    ```
+4. Adicione o seguinte código no final do arquivo:
+    ```php
+    add_action('template_redirect', 'redirect_to_login_page');
+
+    function redirect_to_login_page() {
+        // Verifica se o usuário não está logado
+        if (!is_user_logged_in()) {
+            // Redireciona para a página de login
+            wp_redirect(wp_login_url());
+            exit;
+        }
+    }
+    ```
+5. Salve o arquivo e pronto! Pode acessar o site.
 
 ---
 Para acessar o Wordpress, basta utilizar o DNS do Load Balancer.
