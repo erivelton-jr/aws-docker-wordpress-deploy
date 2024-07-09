@@ -188,7 +188,7 @@ Agora iremos criar um Launch Template para futuramente criar um Auto Scalling Gr
 ---
 #### Alterando pagina inicial do Wordpress
 
-O projeto pede para que o wordpress abra na página de login, então iremos faer isso.
+O projeto pede para que o wordpress abra na página de login, então iremos fazer isso.
 
 1. Vamos logar na instância do Wordpress via EC2 Endpoint.
 2. vá até o efs, onde encontra nossos arquivos wordpress e nosso tema:
